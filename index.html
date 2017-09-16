@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/css/style1.css">
+</head>
+<body >
+  <div class="container">
+    <div class="page-header">
+      <h1>This Is My quiz .develop by <strong style="color: red; text-shadow: 2px 3px 1px #f1f1f1">Khánh Ney</strong></h1>
+      <q cite="">Write Less - Use More by <strong>AngularJS - Google</strong></q>
+      <span class="glyphicon glyphicon-pencil"></span>
+    </div>
+
+    <!-- div Controller -->
+    <div class="" ng-controller="myController as myCtrl" ng-hide="myCtrl.quizFactory.flagHide">
+      <!-- Sử dụng quizFactory để láy flagHide xem có là false hay true -->
+
+      <div class="row">
+        <div class="col-sm-8">
+          <form>
+            <input type="text" name="search" placeholder="Search.." ng-model="myCtrl.searchText">
+          </form>
+        </div>
+        <div class="col-sm-4">
+          <button
+          type="button"
+          class="btn btn-warning pull-right btn-custom" ng-click="myCtrl.myStart()">
+          <strong>Start Quizz</strong>
+        </button>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <!-- ng-repeat allows areas of markup to be repeated for a set number of times using model data -->
+      <!-- in this case it is a property on the view model called data which is being filtered using the search -->
+      <!-- property on the model -->
+      <div class="col-sm-6" ng-repeat="turtle in myCtrl.turtlesData | filter: myCtrl.searchText">
+        <!-- using a bootstrap well to style -->
+        <div class="well well-sm">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- ng-src instead of src to allow correct functionality with angular -->
+              <img ng-src="{{turtle.image_url}}"
+              class="img-circle img-responsive well-image">
+            </div>
+            <div class="col-md-6">
+              <!-- ng-src instead of src to allow correct functionality with angular -->
+              <h4><strong style="color: red; text-shadow: 2px 3px 1px #f1f1f1">{{turtle.type}}</strong></h4>
+              <!-- more angular data binding -->
+              <p><strong>Locations: </strong>{{turtle.locations}}</p>
+              <p><strong>Size: </strong>{{turtle.size}}</p>
+              <p><strong>Average Lifespan: </strong>{{turtle.lifespan}}</p>
+              <p><strong>Diet: </strong>{{turtle.diet}}</p>
+              <!-- ng-click is an angular directive to allow click events within angular -->
+              <!-- data-toggle and data-target are bootstrap attributes to trigger the popup modal -->
+              <button type="button" class="btn btn-info pull-right"
+              data-toggle="modal"
+              data-target="#dataTurtle"
+              ng-click="myCtrl.myFunction1(turtle)">Learn More
+            </button>
+          </div>
+        </div><!-- row -->
+      </div><!-- well -->
+    </div><!-- col-xs-6 -->
+  </div>
+
+  <!--Modal Open - Info Turtle -->
+  <!-- Modal -->
+  <div class="modal" id="dataTurtle">
+    <div class="modal-dialog"><!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-md-12 header-model-custom">
+            <h1>{{myCtrl.temp.type}}</h1>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-8 col-xs-offset-2">
+              <!-- -offset responsive modal -->
+              <img src="{{myCtrl.temp.image_url}}" class="img-thumbnail  img-responsive">
+              <hr>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Locations: </strong>{{myCtrl.temp.locations}}</p>
+              <p><strong>Size: </strong>{{myCtrl.temp.size}}</p>
+              <p><strong>Average Lifespan: </strong>{{myCtrl.temp.lifespan}}</p>
+              <p><strong>Diet: </strong>{{myCtrl.temp.diet}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <p><strong style="color: blue;">Description: </strong>{{myCtrl.temp.description}}</p>
+            </div>
+          </div>
+        </div>
+        <!-- modal body containt img -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger pull right" data-dismiss="modal">Close</button>
+          <!-- Use attr dta-dismiss="modal" -->
+        </div>
+      </div>
+      <!-- Model-content -->
+    </div>
+  </div>
+</div><!-- div ng-myController -->
+
+
+<div class="" ng-controller="quizController as quiz" ng-show="quiz.quizFactory.flagHide">
+  <!-- sử dụng quizFactory để gọi về xét xem flagHide true hay false -->
+  <div class="row">
+    <div class="col-xs-8">
+      <h4><strong>Progress:  </strong></h4>
+      <div class="btn-toolbar">
+        <button class="btn"
+        ng-repeat="question in quiz.dataService.quizQuestions"
+        ng-class="{'btn-info': question.selected !== null , 'btn-danger': question.selected === null}"
+
+
+        ><span class="glyphicon"
+        ng-class="{'glyphicon-pencil': question.selected !== null , 'glyphicon-question-sign': question.selected === null}"
+        ></span></button>
+      </div>
+    </div>
+    <!-- Div Col 8 -->
+    <div class="col-xs-4">
+      <div class="col-md-4">
+        <button type="button" class="btn btn-info center-block">
+          <span class="glyphicon glyphicon-pencil btn-md "></span>
+        </button>
+        <h4><strong>Answered</strong></h4>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="btn btn-info center-block">
+          <span class="glyphicon glyphicon-question-sign btn-md"></span>
+        </button>
+        <h4><strong>Answered</strong></h4>
+      </div>
+    </div>
+    <!-- center-block là class center Button -->
+  </div>
+  <!-- Div Row -->
+  <div class="row">
+    <hr>
+  </div>
+ <div class="row">
+    <div class="well well-sm">
+      <div class="row">
+        <div class="col-xs-12">
+            <h4><strong>{{quiz.index + 1 + ". " + quiz.dataService.quizQuestions[quiz.index].text}}</strong></h4>
+            <!-- Lấy dữ liệu câu hỏi... -->
+            <!-- quiz.dataService.quizQuestions => truy xuất lấy quizQuestions từ dataService -->
+            <!-- lấy trong mảng theo index quiz.index -->
+            <!-- text là 1 member trong object của quizQuestions -->
+
+
+            <div class="row">
+              <br><br>
+                <div class="col-sm-6 " ng-repeat="answer in quiz.dataService.quizQuestions[quiz.index].possibilities">
+                  <br>
+                  <div class="well well-sm well-custom-answer">
+                    <div class="answer-custom-answer-text">
+                        <h4 style="text-align: center; color: black; font-weight: bold;">{{answer.answer}}</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="button" name="button" class="btn btn-warning pull-right btn-continue-answer btn-lg" ng-click="quiz.checkAnswer()">Continue</button>
+            </div>
+            <!-- div row answer -->
+        </div>
+      </div>
+    </div>
+  </div> -->
+</div>
+<!-- Quizzz Controller -->
+</div>
+
+<!-- Script -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+<script type="text/javascript" src="js/controller/controller.js"></script>
+<script type="text/javascript" src="js/controller/quizController.js"></script>
+<script type="text/javascript" src="js/factory/quizFactory.js"></script>
+<script type="text/javascript" src="js/factory/dataService.js"></script>
+</body>
+</html>
